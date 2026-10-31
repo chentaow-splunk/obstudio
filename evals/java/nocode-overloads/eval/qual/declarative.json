@@ -1,0 +1,31 @@
+{
+  "skill": "otel-declarative-instrument",
+  "prompts": [
+    {
+      "id": "exact-overload",
+      "task": "Use $otel-declarative-instrument for ./service. Our Splunk Java agent is built from bcaf26610008af02d2e3fb765a1bc3608b538558. Without editing Java source, write native YAML for only CheckoutService.submit(Order), not submit(String). Use constant span name checkout.submit, INTERNAL kind, and checkout.channel from the read-only getChannel accessor with a null guard. The existing production JVM has one Splunk javaagent and mounts ./instrumentation at /opt/app/instrumentation. Prepare loading and rollback instructions; do not deploy. There is no agent JAR or running OBStudio fixture here, so report checks precisely. Do not install dependencies."
+    },
+    {
+      "id": "current-span",
+      "task": "Use $otel-declarative-instrument for ./service. Our Splunk Java agent is built from bcaf26610008af02d2e3fb765a1bc3608b538558. Enrich an existing active span with checkout.channel from CheckoutService.submit(Order), with a null guard and no new span. Do not match submit(String) or change source. Prepare a draft and handoff only; the agent JAR, collector, and deployment are unavailable. Explain behavior when no span is active. Do not install dependencies."
+    },
+    {
+      "id": "manual-file-delivery",
+      "task": "Use $otel-declarative-instrument for ./service with generation only: I will run OBStudio and this app manually. Our Splunk Java agent is built from bcaf26610008af02d2e3fb765a1bc3608b538558. Write the actual native file ./service/generated/java-nocode.yaml for only CheckoutService.submit(Order), not submit(String), using the static internal span checkout.submit and a null-safe checkout.channel attribute. Inspect the nested Order signature. Do not start Studio, the application, traffic, or deploy or change source. Supply the loader variable and target runtime file path in the handoff and final response. A chat-only YAML snippet does not count as the result."
+    }
+  ],
+  "judge_inputs": [
+    "Inspect ./service/instrumentation and ./service/.observe/declarative-instrumentation.md.",
+    "Inspect the original Java source and final response."
+  ],
+  "rubric": [
+    "Produces a native top-level YAML rule list with class and method selectors, preserving application source.",
+    "Restricts matching to the nested Order overload using the actual binary type com.example.checkout.CheckoutService$Order and parameter_count 1; does not mistakenly use the top-level example Order type or match submit(String).",
+    "Uses null-safe entry-time JEXL only for the approved channel attribute, and does not access returnValue/error in attributes or capture entire objects.",
+    "For exact-overload, the span_name contains an actual quoted JEXL string constant and uses INTERNAL; for current-span, current_span is true and span_name/span_kind/span_status are absent.",
+    "For current-span, explains no active span means no effect and no extra span; for exact-overload, expects one custom span with inherited context when present.",
+    "Names SPLUNK_OTEL_INSTRUMENTATION_NOCODE_YML_FILE and resolves its path in the target runtime, preserving the existing single agent; does not claim files are delivered or hot reloaded.",
+    "Records source commit evidence, loading/restart and rollback steps, and distinguishes file checks from unexecuted real agent/span verification with exact missing prerequisites.",
+    "Writes the actual native YAML file on disk and links it in the final response; for manual-file-delivery it writes generated/java-nocode.yaml and performs no application/collector startup, traffic, or activation, while recording runtime proof as not run by user choice."
+  ]
+}

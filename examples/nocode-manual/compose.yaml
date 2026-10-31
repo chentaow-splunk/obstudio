@@ -1,0 +1,76 @@
+name: obstudio-nocode-manual
+
+x-app-environment: &app-environment
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://studio:14318
+  OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+  OTEL_TRACES_EXPORTER: otlp
+  OTEL_METRICS_EXPORTER: none
+  OTEL_LOGS_EXPORTER: none
+  OTEL_TRACES_SAMPLER: always_on
+  OTEL_BSP_SCHEDULE_DELAY: "100"
+
+services:
+  studio:
+    profiles: [studio]
+    build:
+      context: ../..
+      dockerfile: examples/nocode-manual/Dockerfile.studio
+    ports:
+      - "127.0.0.1:17900:17900"
+      - "127.0.0.1:14318:14318"
+    environment:
+      OTLP_HTTP_PORT: "14318"
+      OTLP_GRPC_HOST: 127.0.0.1
+      OBSTUDIO_MODE: docker-runtime-eval
+      OBSTUDIO_DOCKER_RUNTIME_EVAL_ALLOW_NON_LOOPBACK: "true"
+    command: [obstudio, "--host=0.0.0.0"]
+
+  java:
+    profiles: [apps]
+    build: ./java
+    environment:
+      <<: *app-environment
+      OTEL_SERVICE_NAME: nocode-java-${RUN_LABEL:-manual}
+      SPLUNK_OTEL_INSTRUMENTATION_NOCODE_YML_FILE: /config/java-nocode.yaml
+    volumes:
+      - type: bind
+        source: ./${CONFIG_DIR:-generated}/java-nocode.yaml
+        target: /config/java-nocode.yaml
+        read_only: true
+        bind:
+          create_host_path: false
+
+  node:
+    profiles: [apps]
+    build: ./node
+    environment:
+      <<: *app-environment
+      OTEL_SERVICE_NAME: nocode-node-${RUN_LABEL:-manual}
+      NOCODE_CONFIG_PATH: /config/node-nocode.json
+      OTEL_INSTRUMENTATION_NOCODE_ENABLED: "true"
+      SPLUNK_PROFILER_ENABLED: "false"
+      SPLUNK_METRICS_ENABLED: "false"
+    volumes:
+      - type: bind
+        source: ./${CONFIG_DIR:-generated}/node-nocode.json
+        target: /config/node-nocode.json
+        read_only: true
+        bind:
+          create_host_path: false
+
+  dotnet:
+    profiles: [apps]
+    build: ./dotnet
+    environment:
+      <<: *app-environment
+      OTEL_SERVICE_NAME: nocode-dotnet-${RUN_LABEL:-manual}
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://studio:14318/v1/traces
+      OTEL_EXPERIMENTAL_FILE_BASED_CONFIGURATION_ENABLED: "true"
+      OTEL_CONFIG_FILE: /config/dotnet-nocode.yaml
+    volumes:
+      - type: bind
+        source: ./${CONFIG_DIR:-generated}/dotnet-nocode.yaml
+        target: /config/dotnet-nocode.yaml
+        read_only: true
+        bind:
+          create_host_path: false

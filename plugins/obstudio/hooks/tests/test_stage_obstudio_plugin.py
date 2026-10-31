@@ -40,6 +40,14 @@ class StageObstudioPluginTest(unittest.TestCase):
             self.assertTrue((output / "skills" / "connect-splunk-observability-cloud" / "SKILL.md").is_file())
             self.assertTrue((output / "skills" / "create-splunk-free-account" / "SKILL.md").is_file())
             self.assertTrue((output / "skills" / "otel-instrument" / "SKILL.md").is_file())
+            declarative = output / "skills" / "otel-declarative-instrument"
+            self.assertTrue((declarative / "SKILL.md").is_file())
+            for runtime in ("java", "nodejs", "dotnet"):
+                self.assertEqual(
+                    (declarative / "references" / f"{runtime}.md").read_bytes(),
+                    (STAGE.CANONICAL_SKILLS_ROOT / "otel-declarative-instrument" / "references" / f"{runtime}.md").read_bytes(),
+                )
+            self.assertTrue((declarative.parent / "references" / "local-otlp-receiver.md").is_file())
             self.assertTrue((output / "skills" / "references" / "report-flow-contract.md").is_file())
             self.assertFalse((output / "skills" / "otel-instrument").is_symlink())
             self.assertFalse(any(path.is_symlink() for path in output.rglob("*")))
@@ -549,6 +557,7 @@ class StageObstudioPluginTest(unittest.TestCase):
             STAGE.MAX_DEFAULT_PROMPTS,
         )
         self.assertTrue((skills_path / "otel-instrument" / "SKILL.md").is_file())
+        self.assertTrue((skills_path / "otel-declarative-instrument" / "SKILL.md").is_file())
         self.assertTrue((skills_path / "connect-splunk-observability-cloud" / "SKILL.md").is_file())
         self.assertTrue((skills_path / "create-splunk-free-account" / "SKILL.md").is_file())
         self.assertFalse(any(path.is_symlink() for path in skills_path.rglob("*")))

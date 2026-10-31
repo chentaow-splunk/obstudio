@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "kind": "validation",
+  "mode": "validation",
+  "skill": "otel-declarative-instrument",
+  "metadata": {
+    "mode": "validation",
+    "eval_kind": "validation",
+    "ab_enabled": false,
+    "skill": "otel-declarative-instrument",
+    "run_id": "20261031T222839687864Z",
+    "config_path": "evals/codex-evals.validation.toml",
+    "agent_model": "gpt-6-luna",
+    "judge_model": "",
+    "agent_backend": "codex",
+    "agent_timeout": "1200",
+    "judge_timeout": "900",
+    "rubric_enabled": false,
+    "runtime_enabled": false,
+    "workers": "1",
+    "validation_scope": "full"
+  },
+  "evals": [
+    {
+      "id": "dotnet/nocode-support/qual/declarative",
+      "case": "dotnet/nocode-support",
+      "language": "dotnet",
+      "service": "nocode-support",
+      "prompt_count": 2,
+      "prompts": [
+        "historical-schema",
+        "native-method"
+      ],
+      "definition_path": "evals/dotnet/nocode-support/eval/qual/declarative.json",
+      "eval_dir": "evals/dotnet/nocode-support",
+      "skill_path": "skills/otel-declarative-instrument",
+      "sanity_check_count": 0,
+      "rubric_check_count": 8,
+      "runtime_check_count": 0
+    },
+    {
+      "id": "java/nocode-overloads/qual/declarative",
+      "case": "java/nocode-overloads",
+      "language": "java",
+      "service": "nocode-overloads",
+      "prompt_count": 3,
+      "prompts": [
+        "current-span",
+        "exact-overload",
+        "manual-file-delivery"
+      ],
+      "definition_path": "evals/java/nocode-overloads/eval/qual/declarative.json",
+      "eval_dir": "evals/java/nocode-overloads",
+      "skill_path": "skills/otel-declarative-instrument",
+      "sanity_check_count": 0,
+      "rubric_check_count": 8,
+      "runtime_check_count": 0
+    },
+    {
+      "id": "node/nocode-exports/qual/declarative",
+      "case": "node/nocode-exports",
+      "language": "node",
+      "service": "nocode-exports",
+      "prompt_count": 1,
+      "prompts": [
+        "export-and-private-gap"
+      ],
+      "definition_path": "evals/node/nocode-exports/eval/qual/declarative.json",
+      "eval_dir": "evals/node/nocode-exports",
+      "skill_path": "skills/otel-declarative-instrument",
+      "sanity_check_count": 0,
+      "rubric_check_count": 8,
+      "runtime_check_count": 0
+    }
+  ],
+  "summary": {
+    "eval_count": 3,
+    "case_count": 6,
+    "prompt_count": 6,
+    "sanity_check_count": 0,
+    "rubric_check_count": 48,
+    "runtime_check_count": 0
+  },
+  "source": {
+    "digest_version": 4,
+    "digest": "2725ee508ffc6fe43e8054f5af385f4fdfc01ae882dc76280bf5e7a945c5d086",
+    "eval_kinds": [
+      "rubric"
+    ],
+    "evaluator_semantics_version": 1,
+    "files": {
+      "evals/codex-evals.validation.toml": "503794fa37e80a742e98969f1d4bbdd17d1f9cfe7d6607c4012498c43905b53e",
+      "evals/dotnet/nocode-support/Checkout.Sample.csproj": "56ed98c9ee743bf7179a23b4399e25d7906a7f853ca0b16e92960f8a7171c4f2",
+      "evals/dotnet/nocode-support/CheckoutService.cs": "da779ceabdd8fcd56e5175250caa7eb1dfd31064027612f07308fbb0d5e10749",
+      "evals/dotnet/nocode-support/eval/qual/declarative.json": "274770f8e09c4c37212471fbe26fef98de1696d33ccfbdc4400ad03295848a49",
+      "evals/dotnet/nocode-support/existing.env": "879438c1d18ab9a37f9b4776c79e2949575639d7f70e9f11e25d3ce129313205",
+      "skills/otel-declarative-instrument/SKILL.md": "e197423cea02f360abb59b7c5d211350c0cc16caecb87430fab7d19a1b57bc10",
+      "skills/otel-declarative-instrument/references/dotnet.md": "3b0bd5075f1b024a3a6c57de697ff00ede85f23465a2593f95df1b6fcc627163",
+      "skills/otel-declarative-instrument/references/java.md": "ccd9e6c80d5a894293d6eaccb7d4122e67ef86a487af091cfa9c5d91361a9610",
+      "skills/otel-declarative-instrument/references/nodejs.md": "4d49de7ded47800ad26c364ded5d3b56b337b693bc4ea3d610070cc65675f2bd",
+      "skills/references/consumers.json": "7027a712769e87f811d7f38484594164cb3edd00d7583c683423bb29976666e4",
+      "skills/references/coverage-decision-tree.md": "f1b071d4d8365a98d0c21b1192a1f474d0b2944755a4b5cb51b3b5c102573ead",
+      "skills/references/full-runtime-acceptance.md": "585f42079d71460bbf7c68e4320ceabab6fcc1ba7c711948806c78c9d46736c5",
+      "skills/references/genai-readiness.md": "b06758e80805b09ab485d81c3cc6284acf5e2d18c2af1c0359644f61b80deff4",
+      "skills/references/incident-readiness.md": "787fb441106abcb148f541befd403e5f7889a2234c6cbe590d0c6bce48a3b59a",
+      "skills/references/ledger-template.md": "0db4852ae8e977c86eb65d9ec5fd3ee0373e89bbb94d2eb4e6e88ef3909b8cbc",
+      "skills/references/local-otlp-receiver.md": "6f58148de9ef2fd3e617ddc2622ee09ba785b202100b91261a727af6e3dc7cec",
+      "skills/references/report-flow-contract.md": "d00ca857d4a875dcdb8a699cbf82eda612f42a4f88152ff7a83b4a74eb1b4d0f",
+      "skills/references/scripts/observe_report.py": "c1653e43458d260cecfe30d87db28d3aa800ad5a06c169b0009c46d86c6915e4",
+      "skills/references/signalflow-patterns.md": "4f5c853de344e6873209e9ea05eadea6449704d0592df1e911c5f396cc6394e7",
+      "skills/references/splunk-agent-observability.md": "819faa9e9f27d2b1b41c13980809801fa242c9b6309eb4eae854688a538f4bf4",
+      "skills/references/splunk-api.md": "9e1c638466c7b7ec168f68c7700821a1311e89e0db15d87bf49322d95df010cb",
+      "skills/references/terraform-normalization.md": "4e15bad3475379891075e697907e328dcf4b1c875aa0a1b6d90838c8dbbfa92a",
+      "skills/references/tests/test_observe_report.py": "15eb1f3e299659dd1d219884aac638b168ebf88d8c491f20d8edbaa624a52130",
+      "evals/java/nocode-overloads/CheckoutService.java": "869b0ff6bea9bc99102119549c6cae5856b538438267c1440d6a6cc86115643b",
+      "evals/java/nocode-overloads/eval/qual/declarative.json": "94cf5ef230feeb0adbcfe535d96fe71aba6d5b1e7a3334f664197926a9423f0a",
+      "evals/node/nocode-exports/checkout.js": "c9a6a9b7ca36097cbadab2b0f61844825087a3e6bbaff967285d22150cc06bea",
+      "evals/node/nocode-exports/eval/qual/declarative.json": "7eb9654c016e400dc902290e2b1a509f2433840a9dc9ece4a9ed8bda4018e8f0",
+      "evals/node/nocode-exports/existing.env": "b4f0ac0b0cc79499ecdf25b92a1b4aabb46cf94811610edbe994b051b2e2ebd3",
+      "evals/node/nocode-exports/package.json": "ad4143640c3bead0437e0c1df062326d7576f3498f43f1f785b03c5aafe1dd01"
+    },
+    "skill_path": "skills/otel-declarative-instrument",
+    "shared_reference_consumers": [
+      "skills/references/genai-readiness.md",
+      "skills/references/local-otlp-receiver.md",
+      "skills/references/splunk-agent-observability.md"
+    ],
+    "selections": [
+      {
+        "definition_path": "evals/dotnet/nocode-support/eval/qual/declarative.json",
+        "fixture_dir": "evals/dotnet/nocode-support",
+        "prompt_id": "historical-schema",
+        "eval_kind": "rubric",
+        "eval_inputs": []
+      },
+      {
+        "definition_path": "evals/dotnet/nocode-support/eval/qual/declarative.json",
+        "fixture_dir": "evals/dotnet/nocode-support",
+        "prompt_id": "native-method",
+        "eval_kind": "rubric",
+        "eval_inputs": []
+      },
+      {
+        "definition_path": "evals/java/nocode-overloads/eval/qual/declarative.json",
+        "fixture_dir": "evals/java/nocode-overloads",
+        "prompt_id": "current-span",
+        "eval_kind": "rubric",
+        "eval_inputs": []
+      },
+      {
+        "definition_path": "evals/java/nocode-overloads/eval/qual/declarative.json",
+        "fixture_dir": "evals/java/nocode-overloads",
+        "prompt_id": "exact-overload",
+        "eval_kind": "rubric",
+        "eval_inputs": []
+      },
+      {
+        "definition_path": "evals/java/nocode-overloads/eval/qual/declarative.json",
+        "fixture_dir": "evals/java/nocode-overloads",
+        "prompt_id": "manual-file-delivery",
+        "eval_kind": "rubric",
+        "eval_inputs": []
+      },
+      {
+        "definition_path": "evals/node/nocode-exports/eval/qual/declarative.json",
+        "fixture_dir": "evals/node/nocode-exports",
+        "prompt_id": "export-and-private-gap",
+        "eval_kind": "rubric",
+        "eval_inputs": []
+      }
+    ],
+    "config_path": "evals/codex-evals.validation.toml",
+    "selection_scope": "full"
+  }
+}

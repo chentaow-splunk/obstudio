@@ -1,0 +1,12 @@
+**
+!observer/
+!observer/**
+!skills/
+!skills/**
+!docs/
+!docs/examples.md
+observer/client/node_modules/
+observer/cmd/obstudio/_skills/
+observer/internal/web/static/assets/
+**/__pycache__/
+**/.pytest_cache/

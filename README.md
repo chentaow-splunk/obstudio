@@ -32,6 +32,7 @@ Choose the skill that matches your task. Each skill links to its documentation:
 |---|---|
 | Review a service and identify telemetry gaps | [`$otel-audit`](skills/otel-audit/SKILL.md) |
 | Implement selected telemetry improvements | [`$otel-instrument`](skills/otel-instrument/SKILL.md) |
+| Generate no-code method instrumentation | [`$otel-declarative-instrument`](skills/otel-declarative-instrument/SKILL.md) |
 | Recheck existing instrumentation | [`$otel-verify`](skills/otel-verify/SKILL.md) |
 | Generate detectors and dashboards | [`$splunk-configure`](skills/splunk-configure/SKILL.md) |
 | Generate dashboards only | [`$splunk-dashboard`](skills/splunk-dashboard/SKILL.md) |
@@ -41,6 +42,8 @@ Choose the skill that matches your task. Each skill links to its documentation:
 
 See the [user guide](docs/USER.md#using-the-skills) for the complete workflow
 and [example prompts](docs/examples.md) for common tasks.
+For a runnable Java, Node.js, and .NET no-code instrumentation lab, see
+[the manual three-language walkthrough](examples/nocode-manual/README.md).
 
 ## Splunk Observability Studio
 

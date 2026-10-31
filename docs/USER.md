@@ -102,6 +102,11 @@ The normal workflow is
 - `$otel-instrument` implements approved SDK, auto-instrumentation, and
   custom-signal changes.
 - `$otel-verify` rechecks instrumentation and refreshes proof.
+- `$otel-declarative-instrument` generates native Java/.NET YAML or Node.js JSON
+  no-code rules, loading instructions, and a verification handoff without
+  changing application source. It checks agent-version compatibility and
+  uses the bundled upstream .NET no-code schema, while preserving the
+  distribution's file-based SDK and profiler configuration.
 - `$splunk-dashboard` generates dashboard Terraform and a local preview.
 - `$splunk-configure` generates detector and dashboard Terraform from audit
   evidence.
@@ -112,6 +117,9 @@ The normal workflow is
 
 The skill names above use Codex syntax. Use the prefix shown for your target
 and keep the skill name and arguments unchanged.
+
+To validate generated no-code rules with real Java, Node.js, and .NET agents,
+follow the [manual no-code walkthrough](../examples/nocode-manual/README.md).
 
 ### Audit, select, and instrument
 

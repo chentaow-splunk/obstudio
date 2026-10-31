@@ -10,6 +10,16 @@ Use these prompts as starting points for common Splunk Observability Studio work
 | Assess a legacy service before planning instrumentation work | Run `$otel-audit` on this service -- I need a gap report before the sprint planning |
 | Review and select gaps in the human report | Run `$otel-audit`, then open `.observe/otel.html` so I can select findings and copy the generated `$otel-instrument` command |
 
+## Generate declarative instrumentation
+
+| Use case | Prompt |
+|----------|--------|
+| Trace a Java method without changing source | `$otel-declarative-instrument` Trace this exact CheckoutService.submit overload using my installed Splunk Java agent; write YAML and loading instructions |
+| Add business attributes to an existing Java span | `$otel-declarative-instrument` Add the approved checkout channel to the active span without creating another span |
+| Trace an exported Node.js function | `$otel-declarative-instrument` Generate JSON rules for checkout-core's exported submit function and verify compatibility with my installed agent |
+| Trace a .NET method | `$otel-declarative-instrument` Generate file-based YAML for CheckoutService.Submit using the upstream version bundled by my Splunk .NET agent, preserving its profiler and plugin setup |
+| Migrate AppDynamics POJO rules | `$otel-declarative-instrument` Convert these POJO rules to Java no-code YAML and list selector and Business Transaction semantics that cannot be preserved |
+
 ## Verify existing instrumentation
 
 | Use case | Prompt |

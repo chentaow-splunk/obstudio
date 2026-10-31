@@ -9,6 +9,7 @@
   ],
   "genai-readiness.md": [
     "otel-audit",
+    "otel-declarative-instrument",
     "otel-instrument",
     "otel-verify"
   ],
@@ -22,6 +23,7 @@
   ],
   "local-otlp-receiver.md": [
     "otel-audit",
+    "otel-declarative-instrument",
     "otel-instrument",
     "otel-verify"
   ],
@@ -42,6 +44,7 @@
   ],
   "splunk-agent-observability.md": [
     "otel-audit",
+    "otel-declarative-instrument",
     "otel-instrument",
     "otel-verify"
   ],

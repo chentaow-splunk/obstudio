@@ -22,6 +22,7 @@ export type OverviewChecklistTarget = "cloud";
 
 export interface OverviewChecklistItem {
   label: string;
+  description?: string;
   skill?: OverviewSkillRef;
   target?: OverviewChecklistTarget;
 }
@@ -47,6 +48,12 @@ export const OTEL_VERIFY_SKILL: OverviewSkillRef = {
   id: "otel-verify",
 };
 
+export const OTEL_DECLARATIVE_INSTRUMENT_SKILL: OverviewSkillRef = {
+  command: "$otel-declarative-instrument",
+  docsUrl: "https://github.com/chentaow-splunk/obstudio/blob/codex/nocode-manual-validation/skills/otel-declarative-instrument/SKILL.md",
+  id: "otel-declarative-instrument",
+};
+
 interface OverviewTabProps {
   /** Invoked by checklist steps that hand off to the Cloud tab. */
   onOpenCloud?: () => void;
@@ -59,6 +66,11 @@ interface OverviewTabProps {
 const INSTRUMENTATION_SKILLS: OverviewChecklistItem[] = [
   { label: "Audit instrumentation", skill: OTEL_AUDIT_SKILL },
   { label: "Add auto-instrumentation", skill: OTEL_INSTRUMENT_SKILL },
+  {
+    label: "Add no-code method spans",
+    description: "Optional for business methods. Java/.NET YAML, Node.js JSON; no application source edits.",
+    skill: OTEL_DECLARATIVE_INSTRUMENT_SKILL,
+  },
   { label: "Confirm data flowing", skill: OTEL_VERIFY_SKILL },
 ];
 
@@ -208,6 +220,7 @@ function SkillCard({ id, title, items, onOpenSkillDocs, empty, badge }: {
                     </span>
                     <a
                       className="overview-checklist__docs-link"
+                      aria-label={`Skill docs for ${skill.command}`}
                       href={skill.docsUrl}
                       onClick={(event) => onOpenSkillDocs(event, skill.id)}
                       rel="noopener noreferrer"
@@ -218,6 +231,7 @@ function SkillCard({ id, title, items, onOpenSkillDocs, empty, badge }: {
                     </a>
                   </span>
                 ) : null}
+                {item.description ? <span className="overview-checklist__description">{item.description}</span> : null}
               </li>
             );
           })}

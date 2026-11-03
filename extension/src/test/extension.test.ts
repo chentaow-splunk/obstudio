@@ -2920,6 +2920,7 @@ test('skill docs ids cover the skills the Overview tab offers', () => {
 	for (const expected of [
 		'otel-audit',
 		'otel-instrument',
+		'otel-declarative-instrument',
 		'otel-verify',
 		'splunk-configure',
 		'splunk-detector-publish',
@@ -2927,7 +2928,7 @@ test('skill docs ids cover the skills the Overview tab offers', () => {
 	]) {
 		assert.ok(isSkillDocsId(expected), `${expected} should be a known skill id`);
 	}
-	assert.equal(skillDocsIds.length, 6);
+	assert.equal(skillDocsIds.length, 7);
 	assert.equal(isSkillDocsId('not-a-skill'), false);
 	assert.equal(isSkillDocsId(''), false);
 });
@@ -2941,7 +2942,9 @@ test('every skill id maps to its own documentation URL', () => {
 		assert.ok(url, `${skill} has no documentation URL`);
 		assert.equal(
 			url,
-			`https://github.com/signalfx/obstudio/blob/main/skills/${skill}/SKILL.md`,
+			skill === 'otel-declarative-instrument'
+				? 'https://github.com/chentaow-splunk/obstudio/blob/codex/nocode-manual-validation/skills/otel-declarative-instrument/SKILL.md'
+				: `https://github.com/signalfx/obstudio/blob/main/skills/${skill}/SKILL.md`,
 			`${skill} maps to an unexpected URL`,
 		);
 		assert.ok(!seen.has(url!), `${skill} reuses another skill's URL`);

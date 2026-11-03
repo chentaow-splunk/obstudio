@@ -415,6 +415,9 @@ it('integration: VSIX contains extension host and top-level webview assets', { t
 			encoding: 'utf8',
 		})) as ExtensionPackage;
 		assert.ok(manifest.contributes?.chatSkills?.length);
+		assert.ok(manifest.contributes.chatSkills.some(skill =>
+			skill.path === './dist/copilot-skills/otel-declarative-instrument/SKILL.md'),
+		'Copilot must discover the no-code skill offered in Overview');
 		for (const skill of manifest.contributes.chatSkills) {
 			const archivePath = `extension/${skill.path.replace(/^\.\//, '')}`;
 			const skillName = path.basename(path.dirname(skill.path));
@@ -434,6 +437,9 @@ it('integration: VSIX contains extension host and top-level webview assets', { t
 		for (const resource of [
 			'references/report-flow-contract.md',
 			'otel-instrument/references/languages/go.md',
+			'otel-declarative-instrument/references/java.md',
+			'otel-declarative-instrument/references/dotnet.md',
+			'otel-declarative-instrument/references/nodejs.md',
 			'otel-audit/scripts/scan_python_otel_topology.py',
 			'splunk-dashboard/references/dashboard-templates.md',
 		]) {

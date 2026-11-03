@@ -4,6 +4,7 @@
 import React from "react";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
 import { CLOUD_CONNECT_DESCRIPTION } from "../cloud/copy";
 import { OverviewTab, formatScoreValue, scoreTone, shortCommit } from "./OverviewTab";
 
@@ -92,7 +93,7 @@ function stubScoreFetch(payload: unknown) {
  * Simulates the top-level IDE webview host. HTTP reads and host-owned actions
  * use the same typed message channel as the packaged extension.
  */
-function installBridge(score?: unknown) {
+function installBridge(score?: unknown, rejectSkillOnce?: string) {
   const requests: BridgeRequest[] = [];
   const api = {
     postMessage(message: unknown) {
@@ -114,7 +115,9 @@ function installBridge(score?: unknown) {
           payload: envelope.request.payload,
           requestId: envelope.requestId,
         });
-        respond(envelope.requestId, {});
+        const reject = rejectSkillOnce !== undefined && envelope.request.payload?.skill === rejectSkillOnce;
+        rejectSkillOnce = undefined;
+        respond(envelope.requestId, {}, reject ? "This IDE could not open the skill docs." : undefined);
         return;
       }
       if (envelope.request.kind === "http" && envelope.request.path) {
@@ -132,11 +135,12 @@ function installBridge(score?: unknown) {
   };
   vi.stubGlobal("acquireVsCodeApi", vi.fn(() => api));
 
-  function respond(requestId: string, result: unknown) {
+  function respond(requestId: string, result: unknown, error?: string) {
     void Promise.resolve().then(() => {
       window.dispatchEvent(new MessageEvent("message", {
         data: {
-          ok: true,
+          ok: !error,
+          error,
           requestId,
           result,
           type: "obstudio.host.response",
@@ -410,6 +414,7 @@ describe("OverviewTab", () => {
     expect(items.map((el) => el.querySelector(".overview-checklist__label")?.textContent)).toEqual([
       "Audit instrumentation",
       "Add auto-instrumentation",
+      "Add no-code method spans",
       "Confirm data flowing",
     ]);
     // The list carries no completion state — no markers, no done styling.
@@ -420,6 +425,7 @@ describe("OverviewTab", () => {
   it.each([
     ["Audit instrumentation", "$otel-audit", "otel-audit"],
     ["Add auto-instrumentation", "$otel-instrument", "otel-instrument"],
+    ["Add no-code method spans", "$otel-declarative-instrument", "otel-declarative-instrument"],
     ["Confirm data flowing", "$otel-verify", "otel-verify"],
   ])("links %s to the %s skill", (label, command, skillName) => {
     const { container } = render(<OverviewTab />);
@@ -432,7 +438,9 @@ describe("OverviewTab", () => {
 
     const link = step?.querySelector<HTMLAnchorElement>(".overview-checklist__docs-link");
     expect(link?.getAttribute("href")).toBe(
-      `https://github.com/signalfx/obstudio/blob/main/skills/${skillName}/SKILL.md`,
+      skillName === "otel-declarative-instrument"
+        ? "https://github.com/chentaow-splunk/obstudio/blob/codex/nocode-manual-validation/skills/otel-declarative-instrument/SKILL.md"
+        : `https://github.com/signalfx/obstudio/blob/main/skills/${skillName}/SKILL.md`,
     );
     expect(link?.getAttribute("target")).toBe("_blank");
     expect(link?.getAttribute("rel")).toBe("noopener noreferrer");
@@ -700,6 +708,46 @@ describe("OverviewTab", () => {
 
     expect(writeText).toHaveBeenCalledWith("$otel-instrument");
     vi.unstubAllGlobals();
+  });
+
+  it("explains the optional no-code step and its native file outputs", () => {
+    render(<OverviewTab />);
+    expect(screen.getByText(/Optional for business methods\. Java\/\.NET YAML, Node\.js JSON/)).toBeTruthy();
+  });
+
+  it("copies the no-code command by keyboard and moves focus to its docs", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.spyOn(navigator.clipboard, "writeText").mockResolvedValue();
+    render(<OverviewTab />);
+    const copy = screen.getByRole("button", { name: "Copy $otel-declarative-instrument command" });
+    copy.focus();
+    await user.keyboard("{Enter}");
+    expect(writeText).toHaveBeenCalledWith("$otel-declarative-instrument");
+    expect(copy.title).toBe("$otel-declarative-instrument command copied");
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByRole("link", { name: "Skill docs for $otel-declarative-instrument" }));
+    writeText.mockRestore();
+  });
+
+  it("leaves native browser navigation available for the no-code docs", () => {
+    render(<OverviewTab />);
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+    screen.getByRole("link", { name: "Skill docs for $otel-declarative-instrument" }).dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("recovers from a no-code IDE docs failure without blocking existing skills", async () => {
+    const harness = installBridge(undefined, "otel-declarative-instrument");
+    render(<OverviewTab />);
+    const docs = screen.getByRole("link", { name: "Skill docs for $otel-declarative-instrument" });
+    fireEvent.click(docs);
+    await waitFor(() => expect(screen.getByText("This IDE could not open the skill docs.")).toBeTruthy());
+    fireEvent.click(screen.getByRole("link", { name: "Skill docs for $otel-audit" }));
+    await waitFor(() => expect(screen.queryByText("This IDE could not open the skill docs.")).toBeNull());
+    fireEvent.click(docs);
+    expect(harness.requests.filter(r => r.action === "open-skill-docs").map(r => r.payload?.skill))
+      .toEqual(["otel-declarative-instrument", "otel-audit", "otel-declarative-instrument"]);
+    expect(JSON.stringify(harness.requests)).not.toContain("https://");
   });
 
   it("summarizes the report's counts in the callout", async () => {

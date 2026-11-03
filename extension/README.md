@@ -34,7 +34,7 @@ The extension provides these integration commands:
 ### GitHub Copilot in VS Code
 
 With **VS Code 1.109 or newer** and GitHub Copilot agent chat, the extension
-contributes all nine bundled skills automatically. Start a new chat and type
+contributes all bundled skills automatically. Start a new chat and type
 `/otel-audit`, `/otel-instrument`, or `/otel-verify`; Copilot can also select
 relevant skills from their descriptions. No skill-copy command or changes to
 your workspace or personal Copilot settings are required. Older editors retain

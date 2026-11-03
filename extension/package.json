@@ -62,6 +62,7 @@
       { "path": "./dist/copilot-skills/create-splunk-free-account/SKILL.md" },
       { "path": "./dist/copilot-skills/otel-audit/SKILL.md" },
       { "path": "./dist/copilot-skills/otel-instrument/SKILL.md" },
+      { "path": "./dist/copilot-skills/otel-declarative-instrument/SKILL.md" },
       { "path": "./dist/copilot-skills/otel-verify/SKILL.md" },
       { "path": "./dist/copilot-skills/splunk-configure/SKILL.md" },
       { "path": "./dist/copilot-skills/splunk-dashboard/SKILL.md" },

@@ -33,6 +33,7 @@ const cimdCloudActions: ReadonlySet<ObserverHostCloudAction> = new Set(['login-c
 export const observerHostSkillIds = [
   "otel-audit",
   "otel-instrument",
+  "otel-declarative-instrument",
   "otel-verify",
   "splunk-configure",
   "splunk-detector-publish",

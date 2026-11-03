@@ -32,6 +32,7 @@ does not apply to Codex.
 | Stop Splunk Observability Studio | `$observer-stop` | `/obstudio:observer-stop` |
 | Find telemetry gaps | `$otel-audit` | `/obstudio:otel-audit` |
 | Implement selected telemetry improvements | `$otel-instrument` | `/obstudio:otel-instrument` |
+| Generate no-code method instrumentation | `$otel-declarative-instrument` | `/obstudio:otel-declarative-instrument` |
 | Verify instrumentation | `$otel-verify` | `/obstudio:otel-verify` |
 | Generate detectors and dashboards | `$splunk-configure` | `/obstudio:splunk-configure` |
 | Generate dashboards only | `$splunk-dashboard` | `/obstudio:splunk-dashboard` |

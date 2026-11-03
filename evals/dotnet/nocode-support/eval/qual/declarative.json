@@ -1,0 +1,27 @@
+{
+  "skill": "otel-declarative-instrument",
+  "prompts": [
+    {
+      "id": "native-method",
+      "task": "Use $otel-declarative-instrument for ./service. Our Splunk .NET distribution is v1.16.0, bundling upstream v1.17.0. Without changing C# source, generate a complete file-based configuration for only Checkout.CheckoutService.Submit(System.String), returning System.String in assembly Checkout.Sample. Capture the bounded channel argument with null fallback unknown, use internal span checkout.submit, and configure local OTLP/HTTP traces at http://127.0.0.1:14318/v1/traces with service name checkout-dotnet. Preserve existing.env; do not instrument SubmitObserved or install a second SDK. The CLR profiler/startup hook is already configured in production. Write activation and rollback instructions but do not deploy. The agent binary and collector are unavailable here; do not claim runtime verification."
+    },
+    {
+      "id": "historical-schema",
+      "task": "Use $otel-declarative-instrument for ./service. I found PR 4515 with no_code/development at the YAML root. Our installed Splunk .NET v1.16.0 bundles upstream v1.17.0. Create a complete YAML configuration for Checkout.CheckoutService.Submit(System.String), returning System.String in assembly Checkout.Sample, with internal span checkout.submit and bounded channel argument attribute. Explain which schema actually applies, based on released parser/tests rather than copying the old PR. Preserve C# and existing.env. Keep the Splunk plugin, use service checkout-dotnet and OTLP/HTTP endpoint http://127.0.0.1:14318/v1/traces. Do not deploy or claim receipt; no binary/collector is available."
+    }
+  ],
+  "judge_inputs": [
+    "Inspect ./service for complete native YAML configuration, unchanged C# source and existing.env, and .observe/declarative-instrumentation.md.",
+    "Read ./last_message.md."
+  ],
+  "rubric": [
+    "Uses the released upstream method instrumentation inherited by the Splunk distribution; does not incorrectly declare .NET no-code tracing unavailable.",
+    "Writes a complete file_format 1.0 SDK YAML with instrumentation/development.dotnet.no_code.targets, not the historical no_code/development root or a Java-style list.",
+    "Matches assembly Checkout.Sample, type Checkout.CheckoutService, method Submit, return_type System.String and ordered parameter_types [System.String], leaving SubmitObserved untouched.",
+    "Uses static span name checkout.submit, lowercase internal kind, and typed checkout.channel attribute with null-safe entry-time CEL value_source using arguments[0]; does not use JEXL, return in entry attributes, or capture whole objects.",
+    "Retains the Splunk plugin under plugins/development, declares resource service.name and an otlp_http trace exporter with the non-default port and exactly one /v1/traces path.",
+    "Names both OTEL_EXPERIMENTAL_FILE_BASED_CONFIGURATION_ENABLED=true and OTEL_CONFIG_FILE, preserves profiler/startup-hook activation, and explains that enabling file mode requires migrating relevant SDK configuration rather than assuming all env settings carry over.",
+    "Records release/upstream evidence, restart and rollback steps, exact unavailable real-agent proof, and does not claim generated files were activated or observed.",
+    "Creates actual native configuration files on disk and identifies their paths and loader variables in the final response; chat code blocks or a report alone are not accepted as delivered configuration."
+  ]
+}

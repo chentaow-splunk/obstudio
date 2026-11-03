@@ -1539,12 +1539,20 @@ def test_genai_reference_covers_content_governance_contract():
 def test_required_genai_profile_is_shared_with_verification():
     consumers = json.loads(_read(SKILLS_DIR / "references" / "consumers.json"))
     assert consumers["genai-readiness.md"] == [
-        "otel-audit", "otel-instrument", "otel-verify"
+        "otel-audit", "otel-declarative-instrument", "otel-instrument", "otel-verify"
     ]
-    for name in consumers["genai-readiness.md"]:
+    # Declarative instrumentation consumes this contract indirectly through
+    # local receiver resolution; the existing three skills load it directly.
+    for name in ("otel-audit", "otel-instrument", "otel-verify"):
         entrypoint = _read(SKILLS_DIR / name / "SKILL.md")
         assert "../references/genai-readiness.md" in entrypoint
         assert "Required GenAI Coverage Profile" in " ".join(entrypoint.split())
+    declarative = _read(SKILLS_DIR / "otel-declarative-instrument" / "SKILL.md")
+    assert "../references/local-otlp-receiver.md" in declarative
+    receiver = _read(SKILLS_DIR / "references" / "local-otlp-receiver.md")
+    assert "splunk-agent-observability.md" in receiver
+    ao = _read(SKILLS_DIR / "references" / "splunk-agent-observability.md")
+    assert "genai-readiness.md" in ao
 
 
 def test_genai_reports_require_joined_producer_field_and_lifecycle_evidence():

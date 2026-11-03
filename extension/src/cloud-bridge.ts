@@ -227,6 +227,7 @@ export function auditReportUrl(baseUrl: unknown): string | undefined {
 export const skillDocsIds = [
 	'otel-audit',
 	'otel-instrument',
+	'otel-declarative-instrument',
 	'otel-verify',
 	'splunk-configure',
 	'splunk-detector-publish',
@@ -243,6 +244,7 @@ export type SkillDocsId = typeof skillDocsIds[number];
 const skillDocsUrls: Record<SkillDocsId, string> = {
 	'otel-audit': 'https://github.com/signalfx/obstudio/blob/main/skills/otel-audit/SKILL.md',
 	'otel-instrument': 'https://github.com/signalfx/obstudio/blob/main/skills/otel-instrument/SKILL.md',
+	'otel-declarative-instrument': 'https://github.com/chentaow-splunk/obstudio/blob/codex/nocode-manual-validation/skills/otel-declarative-instrument/SKILL.md',
 	'otel-verify': 'https://github.com/signalfx/obstudio/blob/main/skills/otel-verify/SKILL.md',
 	'splunk-configure': 'https://github.com/signalfx/obstudio/blob/main/skills/splunk-configure/SKILL.md',
 	'splunk-detector-publish': 'https://github.com/signalfx/obstudio/blob/main/skills/splunk-detector-publish/SKILL.md',

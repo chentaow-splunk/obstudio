@@ -313,6 +313,7 @@ Outputs:
 | `$connect-splunk-observability-cloud` | Open the existing local Splunk Observability Studio Cloud tab for secure organization connection |
 | `$otel-audit` | Read-only observability coverage scan |
 | `$otel-instrument` | Add OpenTelemetry auto-instrumentation and targeted custom signals |
+| `$otel-declarative-instrument` | Generate native Java, .NET, and Node.js no-code rules |
 | `$otel-verify` | Prove instrumentation with project-runtime, app-code, and optional OTLP checks |
 | `$splunk-configure` | Generate Splunk O11y detector Terraform from audit report |
 | `$splunk-dashboard` | Generate Splunk O11y dashboard Terraform from audit and verification reports |

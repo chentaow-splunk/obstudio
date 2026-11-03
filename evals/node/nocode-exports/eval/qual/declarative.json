@@ -1,0 +1,23 @@
+{
+  "skill": "otel-declarative-instrument",
+  "prompts": [
+    {
+      "id": "export-and-private-gap",
+      "task": "Use $otel-declarative-instrument for ./service. Our Splunk Node agent is built from 4faf2d29aec03cd6968bfbcd6241a76197377407 and starts before module loading. Generate no-source-change rules for submit(order) and the internal calculateRisk(order), capturing only order.channel. The requested span kind is CLIENT; tell me if the agent cannot express it. In deployment checkout.js is /opt/app/checkout.js, instrumentation files are mounted under /opt/app/instrumentation. Preserve the explicitly configured local receiver port, protocol, and service name in existing.env; this app runs in the receiver's host namespace. Write native configuration for supported targets and report gaps instead of making source edits. Do not deploy or install packages. The actual agent and collector are unavailable in this fixture."
+    }
+  ],
+  "judge_inputs": [
+    "Inspect ./service/instrumentation, ./service/.observe/declarative-instrumentation.md, and the unchanged checkout.js.",
+    "Read ./last_message.md."
+  ],
+  "rubric": [
+    "Writes a JSON array using absolutePath /opt/app/checkout.js, a files entry with extensionless name checkout and methodName submit, and a bounded constant spanName.",
+    "Uses attributes with integer attrIndex 0, attrPath channel, and a stable key; no Java/JEXL/YAML fields, whole-object extraction, secrets or invented sanitization expressions.",
+    "Reports calculateRisk as unsupported because it is not exported, and leaves source unchanged without fabricating a working rule.",
+    "Reports CLIENT kind as unsupported by the checked Node schema, explaining expected INTERNAL kind instead of emitting an ignored spanKind field.",
+    "Uses NOCODE_CONFIG_PATH with the target filesystem path, preserves early single-agent startup, and identifies restart and rollback requirements without claiming deployment or OpAMP push.",
+    "Explains native Promise completion/error verification and diagnostic-log exposure of attributes; separates syntax/source compatibility from missing real-agent telemetry proof.",
+    "Preserves and records the operator's non-default local endpoint http://127.0.0.1:14318, http/protobuf protocol, and checkout-fixture service identity, without a startup Studio discovery call or replacing it with port 4318.",
+    "Creates actual native configuration files on disk and identifies their paths and loader variables in the final response; chat code blocks or a report alone are not accepted as delivered configuration."
+  ]
+}

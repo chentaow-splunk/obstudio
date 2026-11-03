@@ -239,16 +239,18 @@ def test_skills_separate_local_receipt_from_configured_cloud_delivery() -> None:
 
     assert consumers["local-otlp-receiver.md"] == [
         "otel-audit",
+        "otel-declarative-instrument",
         "otel-instrument",
         "otel-verify",
     ]
     assert consumers["splunk-agent-observability.md"] == [
         "otel-audit",
+        "otel-declarative-instrument",
         "otel-instrument",
         "otel-verify",
     ]
 
-    for skill_name in ("otel-audit", "otel-instrument", "otel-verify"):
+    for skill_name in ("otel-audit", "otel-declarative-instrument", "otel-instrument", "otel-verify"):
         skill = _read(SKILLS / skill_name / "SKILL.md")
         assert "../references/local-otlp-receiver.md" in skill
 

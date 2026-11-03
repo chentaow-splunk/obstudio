@@ -1,0 +1,7 @@
+{
+  "name": "obstudio-nocode-node-sample",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {"@splunk/otel": "4.12.1"}
+}

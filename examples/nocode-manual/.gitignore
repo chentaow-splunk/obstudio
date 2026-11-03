@@ -1,0 +1,5 @@
+generated/
+.results/
+node/node_modules/
+dotnet/bin/
+dotnet/obj/

@@ -72,7 +72,7 @@ To connect every supported target to the running shared instance:
 | `copilot` | MCP only; no bundled skill |
 
 The CLI `copilot` target above configures MCP only. **Copilot in VS Code 1.109+**
-can instead discover all nine skills directly from the installed
+can instead discover all bundled skills directly from the installed
 [VS Code extension](../extension/README.md#github-copilot-in-vs-code), without
 copying skills into the project or user profile. Use `/otel-audit` in a new
 agent chat. Configure the local MCP server separately when using runtime tools.
@@ -102,6 +102,11 @@ The normal workflow is
 - `$otel-instrument` implements approved SDK, auto-instrumentation, and
   custom-signal changes.
 - `$otel-verify` rechecks instrumentation and refreshes proof.
+- `$otel-declarative-instrument` generates native Java/.NET YAML or Node.js JSON
+  no-code rules, loading instructions, and a verification handoff without
+  changing application source. It checks agent-version compatibility and
+  uses the bundled upstream .NET no-code schema, while preserving the
+  distribution's file-based SDK and profiler configuration.
 - `$splunk-dashboard` generates dashboard Terraform and a local preview.
 - `$splunk-configure` generates detector and dashboard Terraform from audit
   evidence.
@@ -112,6 +117,9 @@ The normal workflow is
 
 The skill names above use Codex syntax. Use the prefix shown for your target
 and keep the skill name and arguments unchanged.
+
+To validate generated no-code rules with real Java, Node.js, and .NET agents,
+follow the [manual no-code walkthrough](../examples/nocode-manual/README.md).
 
 ### Audit, select, and instrument
 
@@ -136,12 +144,30 @@ Run `$otel-verify` later whenever application or runtime evidence has changed.
 | Audit | `.observe/otel-audit.json` and the interactive `.observe/otel.html` report |
 | Selection | `.observe/otel-selection.json`, including findings, decisions, and dependency-complete scope |
 | Instrumentation | `.observe/otel-instrumentation.md`, `.observe/otel-instrumentation.json`, and `.observe/otel-instrumentation.html` |
+| No-code instrumentation | Native YAML/JSON at requested paths and `.observe/declarative-instrumentation.md` |
 | Verification | `.observe/otel-verify.md` and `.observe/otel-verify.json` |
 
 Audit and instrumentation are separate reports. Their JSON and Markdown
 artifacts remain in `.observe/`. See
 [OTel Verify](https://github.com/signalfx/obstudio/blob/main/docs/otel-verify.md)
 for direct verification guidance.
+
+### Add business-method spans without source changes
+
+In **Overview → Instrumentation Skills**, choose **Add no-code method spans**
+after auditing gaps and checking automatic instrumentation.
+Use this optional step when a Java, .NET, or Node.js business method needs a
+span that existing instrumentation does not provide. You can also invoke the
+skill directly without an audit.
+
+Copy `$otel-declarative-instrument` into your coding agent and specify the
+service, target methods and installed agent version. The skill writes native
+Java/.NET YAML or Node.js JSON files and a separate
+`.observe/declarative-instrumentation.md` handoff. Review the generated files,
+load them with the application's agent, restart the application and exercise
+the target methods. Then use **Confirm data flowing** (`$otel-verify`) and
+Studio's traces to check the resulting spans. Generation alone does not prove
+that the rules loaded or that spans were emitted.
 
 ## Manage a shared Splunk Observability Studio
 

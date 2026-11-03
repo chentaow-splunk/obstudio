@@ -8228,6 +8228,7 @@ code {
    drawn explicitly. */
 .overview-checklist__item {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   font-size: var(--font-body);
@@ -8240,12 +8241,41 @@ code {
   content: "•";
 }
 
+.overview-checklist__label {
+  flex: 1;
+  min-width: 140px;
+}
+
+.overview-checklist__description {
+  display: block;
+  flex-basis: 100%;
+  margin-left: 18px;
+  font-size: var(--font-meta);
+  color: var(--text-dim);
+}
+
 .overview-checklist__actions {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   margin-left: auto;
   padding-left: 12px;
+  max-width: 100%;
+}
+
+.overview-checklist__actions .command-chip {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.overview-checklist__actions .overview-checklist__command {
+  min-width: 0;
+  height: auto;
+  min-height: 24px;
+  line-height: 24px;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .overview-checklist__command {

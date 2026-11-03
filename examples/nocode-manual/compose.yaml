@@ -1,7 +1,7 @@
 name: obstudio-nocode-manual
 
 x-app-environment: &app-environment
-  OTEL_EXPORTER_OTLP_ENDPOINT: http://studio:14318
+  OTEL_EXPORTER_OTLP_ENDPOINT: ${SAMPLE_OTLP_ENDPOINT:-http://studio:14318}
   OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
   OTEL_TRACES_EXPORTER: otlp
   OTEL_METRICS_EXPORTER: none
@@ -64,7 +64,7 @@ services:
     environment:
       <<: *app-environment
       OTEL_SERVICE_NAME: nocode-dotnet-${RUN_LABEL:-manual}
-      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://studio:14318/v1/traces
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${SAMPLE_OTLP_ENDPOINT:-http://studio:14318}/v1/traces
       OTEL_EXPERIMENTAL_FILE_BASED_CONFIGURATION_ENABLED: "true"
       OTEL_CONFIG_FILE: /config/dotnet-nocode.yaml
     volumes:

@@ -12,7 +12,55 @@ Splunk .NET v1.16.0/.NET 8 (bundled upstream v1.17.0). Java and .NET downloads
 are checksum verified; Node uses its lockfile. You need Python 3.9+ and Docker
 with Compose; the language runtimes are inside the images.
 
-## 1. Build without starting anything
+## Native Studio with the Codex installer (macOS / Docker Desktop)
+
+This path uses a native Studio process with the three sample apps in Docker.
+From the repository root, assemble the folder (already prepared locally for
+this exercise):
+
+```sh
+make bundle-local VERSION=0.1.4-nocode-local
+cd .release/obstudio_0.1.4-nocode-local_darwin_arm64
+./obstudio install --target=codex
+```
+
+The example folder name is for Apple Silicon; source builds use Go's OS and
+architecture names. This is a development bundle, not an official release.
+It contains the UI and all canonical skills embedded in `obstudio`, plus the
+real Weaver runtime. Installation extracts the new skill and its Java, .NET,
+and Node references into `~/.codex/skills/obstudio/otel-declarative-instrument`
+and creates its discovery link at `~/.codex/skills/otel-declarative-instrument`.
+It also configures the local MCP server in `~/.codex/config.toml`.
+
+Restart Codex and open a new task in this repository. The configured MCP
+server starts Studio; installation itself does not start it. Open
+[Studio](http://127.0.0.1:17900) and confirm `/api/health` responds before
+running the apps. The native process uses OTLP/HTTP port **4318**. Do not start
+the Docker `studio` service at the same time. If a previous Studio is running,
+installation may reuse it; deliberately stop or update that instance before
+testing this bundle. See the [user guide](../../docs/USER.md) for shared mode.
+
+In the terminal where you will run the sample apps, return to the sample
+directory and select the native endpoint:
+
+```sh
+cd /path/to/obstudio/examples/nocode-manual
+export SAMPLE_OTLP_ENDPOINT=http://host.docker.internal:4318
+docker compose --profile apps build
+```
+
+Docker Desktop on macOS makes that hostname reach the host's loopback listener;
+this route was checked locally. It is not a verified Linux bridge-network
+recipe. Keep Studio bound to loopback. Continue with steps 3–6 below, using the
+same terminal so the endpoint override applies to all three languages.
+Step 4 still produces actual YAML/YAML/JSON files; .NET's YAML must preserve
+`${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT}` so Compose can supply the native URL.
+
+Afterward, `docker compose down` removes the sample network but does not stop
+native Studio. In agent-managed mode, close the Codex session that owns its MCP
+process. Do not stop another task's collector.
+
+## 1. Build without starting anything (alternative: Docker Studio)
 
 From this repository's root:
 
@@ -28,6 +76,7 @@ container creation rather than becoming empty directories.
 ## 2. Start OBStudio manually
 
 ```sh
+unset SAMPLE_OTLP_ENDPOINT
 docker compose up -d studio
 curl --fail http://127.0.0.1:17900/api/health
 ```
@@ -107,8 +156,9 @@ docker compose run --rm --no-deps dotnet
 These commands mount the skill's generated files read-only. The launchers use
 `SPLUNK_OTEL_INSTRUMENTATION_NOCODE_YML_FILE`, `NOCODE_CONFIG_PATH`, and
 `OTEL_CONFIG_FILE`; .NET's native CLR profiler/startup hooks and experimental
-file-based mode are already configured. The app endpoint is
-`http://studio:14318` (the .NET trace exporter includes `/v1/traces`).
+file-based mode are already configured. The default app endpoint is
+`http://studio:14318`; `SAMPLE_OTLP_ENDPOINT` selects the native Studio instead
+(the .NET trace exporter includes `/v1/traces`).
 
 In Studio, filter for `nocode-java-try1`, `nocode-node-try1`, and
 `nocode-dotnet-try1`. You should see exactly three spans per service, named

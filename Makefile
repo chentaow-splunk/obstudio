@@ -17,6 +17,7 @@ AGENT_POLICY_ARGS := $(if $(strip $(AGENT_POLICY_BASE)),--base-ref "$(AGENT_POLI
 EVAL_MODEL_POLICY_BASE ?= origin/main
 
 ABS_BUILD  := $(CURDIR)/$(BUILD_DIR)
+LOCAL_BUNDLE_DIR = $(CURDIR)/.release/obstudio_$(VERSION)_$(shell $(GO) env GOOS)_$(shell $(GO) env GOARCH)
 PLUGIN_RELEASE_DIR ?= $(CURDIR)/.release/plugins
 RELEASE_WEAVER_DIR := $(CURDIR)/.release/weaver
 PLUGIN_CODEX_STAGE_DIR := $(PLUGIN_RELEASE_DIR)/obstudio-codex
@@ -86,6 +87,13 @@ package-obstudio-plugin: require-release-tag ## Build versioned self-contained C
 build: stage-skills build-client bundle-weaver ## Build obstudio binary (client + skills embedded)
 	@mkdir -p $(BUILD_DIR)
 	cd $(GO_DIR) && $(GO) build $(GOFLAGS) $(LDFLAGS) -o $(ABS_BUILD)/$(BINARY) $(GO_CMD)
+
+.PHONY: bundle-local
+bundle-local: build ## Assemble a native installable folder with embedded skills and Weaver
+	mkdir -p "$(LOCAL_BUNDLE_DIR)/docs"
+	cp "$(ABS_BUILD)/$(BINARY)" "$(ABS_BUILD)/weaver" "$(LOCAL_BUNDLE_DIR)/"
+	cp docs/USER.md docs/examples.md "$(LOCAL_BUNDLE_DIR)/docs/"
+	@echo "Local bundle: $(LOCAL_BUNDLE_DIR)"
 
 build-vsix: ## Build the VS Code extension package (.vsix)
 	cd extension && npm ci
